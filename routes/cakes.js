@@ -11,19 +11,125 @@ const { cakeValidationRules, validate } = require('../validators/cakeValidator')
 
 const router = express.Router();
 
-// GET all cakes
-router.get('/', getCakes);
+/**
+ * @swagger
+ * /cakes:
+ *   get:
+ *     summary: Get all cakes
+ *     responses:
+ *       200:
+ *         description: List of cakes
+ */
+router.get('/', getCakes); // GET all cakes
 
-// GET cake by ID
-router.get('/:id', getCakeById);
+/**
+ * @swagger
+ * /cakes/{id}:
+ *   get:
+ *     summary: Get a cake by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Cake ID
+ *     responses:
+ *       200:
+ *         description: A single cake
+ *       404:
+ *         description: Cake not found
+ */
+router.get('/:id', getCakeById); // GET cake by ID
 
-// POST new cake
-router.post('/', cakeValidationRules(), validate, createCake);
 
-// PUT update cake
-router.put('/:id', cakeValidationRules(), validate, updateCake);
+/**
+ * @swagger
+ * /cakes:
+ *   post:
+ *     summary: Create a new cake
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               size:
+ *                 type: string
+ *                 enum: [small, medium, large]
+ *               price:
+ *                 type: number
+ *               ingredients:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       201:
+ *         description: Cake created
+ *       400:
+ *         description: Validation error
+ */
+router.post('/', cakeValidationRules(), validate, createCake); // POST new cake
 
-// DELETE cake
-router.delete('/:id', deleteCake);
+/**
+ * @swagger
+ * /cakes/{id}:
+ *   put:
+ *     summary: Update an existing cake
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Cake ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               size:
+ *                 type: string
+ *                 enum: [small, medium, large]
+ *               price:
+ *                 type: number
+ *               ingredients:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       200:
+ *         description: Cake updated
+ *       404:
+ *         description: Cake not found
+ */
+router.put('/:id', cakeValidationRules(), validate, updateCake); // PUT update cake
+
+/**
+ * @swagger
+ * /cakes/{id}:
+ *   delete:
+ *     summary: Delete a cake by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Cake ID
+ *     responses:
+ *       200:
+ *         description: Cake deleted
+ *       404:
+ *         description: Cake not found
+ */
+router.delete('/:id', deleteCake); // DELETE cake
 
 module.exports = router;
