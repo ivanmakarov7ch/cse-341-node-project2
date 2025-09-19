@@ -1,11 +1,10 @@
 const express = require('express');
-const router = express.Router();
-const cakeController = require('../controllers/cakeController');
+const { getCakes, createCake } = require('../controllers/cakeController');
+const { cakeValidationRules, validate } = require('../validators/cakeValidator');
 
-router.get('/', cakeController.getCakes);
-router.get('/:id', cakeController.getCakeById);
-router.post('/', cakeController.createCake);
-router.put('/:id', cakeController.updateCake);
-router.delete('/:id', cakeController.deleteCake);
+const router = express.Router();
+
+router.get('/', getCakes);
+router.post('/', cakeValidationRules(), validate, createCake);
 
 module.exports = router;

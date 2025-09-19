@@ -1,11 +1,11 @@
 const express = require('express');
-const router = express.Router();
-const consumerController = require('../controllers/consumerController');
+const { getConsumers, createConsumer } = require('../controllers/consumerController');
+const { consumerValidationRules, validate } = require('../validators/consumerValidator');
 
-router.get('/', consumerController.getConsumers);
-router.get('/:id', consumerController.getConsumerById);
-router.post('/', consumerController.createConsumer);
-router.put('/:id', consumerController.updateConsumer);
-router.delete('/:id', consumerController.deleteConsumer);
+const router = express.Router();
+
+router.get('/', getConsumers);
+router.post('/', consumerValidationRules(), validate, createConsumer);
 
 module.exports = router;
+
