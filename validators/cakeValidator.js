@@ -4,9 +4,9 @@ const { body, validationResult } = require('express-validator');
 const cakeValidationRules = () => {
   return [
     body('name').notEmpty().withMessage('Name is required'),
-    body('flavor').notEmpty().withMessage('Flavor is required'),
+    body('size').isIn(['small', 'medium', 'large']).withMessage('Size must be small, medium, or large'),
     body('price').isFloat({ gt: 0 }).withMessage('Price must be a positive number'),
-    body('available').optional().isBoolean().withMessage('Available must be true/false')
+    body('ingredients').optional().isArray().withMessage('Ingredients must be an array of strings')
   ];
 };
 
