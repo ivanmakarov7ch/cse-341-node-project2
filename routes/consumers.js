@@ -13,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /consumers:
+ * /api/consumers:
  *   get:
  *     summary: Get all consumers
  *     responses:
@@ -24,7 +24,7 @@ router.get('/', getConsumers); // GET all consumers
 
 /**
  * @swagger
- * /consumers/{id}:
+ * /api/consumers/{id}:
  *   get:
  *     summary: Get a consumer by ID
  *     parameters:
@@ -44,7 +44,7 @@ router.get('/:id', getConsumerById); // GET consumer by ID
 
 /**
  * @swagger
- * /consumers:
+ * /api/consumers:
  *   post:
  *     summary: Create a new consumer
  *     requestBody:
@@ -82,7 +82,7 @@ router.post('/', consumerValidationRules(), validate, createConsumer); // POST n
 
 /**
  * @swagger
- * /consumers/{id}:
+ * /api/consumers/{id}:
  *   put:
  *     summary: Update an existing consumer
  *     parameters:
@@ -127,7 +127,7 @@ router.put('/:id', consumerValidationRules(), validate, updateConsumer); // PUT 
 
 /**
  * @swagger
- * /consumers/{id}:
+ * /api/consumers/{id}:
  *   delete:
  *     summary: Delete a consumer by ID
  *     parameters:

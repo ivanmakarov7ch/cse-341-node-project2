@@ -13,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /cakes:
+ * api/cakes:
  *   get:
  *     summary: Get all cakes
  *     responses:
@@ -24,7 +24,7 @@ router.get('/', getCakes); // GET all cakes
 
 /**
  * @swagger
- * /cakes/{id}:
+ * /api/cakes/{id}:
  *   get:
  *     summary: Get a cake by ID
  *     parameters:
@@ -45,7 +45,7 @@ router.get('/:id', getCakeById); // GET cake by ID
 
 /**
  * @swagger
- * /cakes:
+ * /api/cakes:
  *   post:
  *     summary: Create a new cake
  *     requestBody:
@@ -76,7 +76,7 @@ router.post('/', cakeValidationRules(), validate, createCake); // POST new cake
 
 /**
  * @swagger
- * /cakes/{id}:
+ * /api/cakes/{id}:
  *   put:
  *     summary: Update an existing cake
  *     parameters:
@@ -114,7 +114,7 @@ router.put('/:id', cakeValidationRules(), validate, updateCake); // PUT update c
 
 /**
  * @swagger
- * /cakes/{id}:
+ * /api/cakes/{id}:
  *   delete:
  *     summary: Delete a cake by ID
  *     parameters:
