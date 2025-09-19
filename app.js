@@ -1,29 +1,29 @@
 const express = require('express');
-const dotenv = require('dotenv');
 const connectDB = require('./db/connection');
+require('dotenv').config();
 
-dotenv.config();
+const consumersRouter = require('./routes/consumers');
+const cakesRouter = require('./routes/cakes');
 
 const app = express();
-app.use(express.json()); // parse JSON requests
+
+// Middleware
+app.use(express.json());
 
 // Connect to MongoDB
 connectDB();
 
-// Root route (your Hello World)
+// Routes
+app.use('/api/consumers', consumersRouter);
+app.use('/api/cakes', cakesRouter);
+
+// Test route
 app.get('/', (req, res) => {
   res.send('Hello World, This is Node!');
 });
 
-// Routes
-const consumerRoutes = require('./routes/consumers');
-const cakeRoutes = require('./routes/cakes');
-
-app.use('/api/consumers', consumerRoutes);
-app.use('/api/cakes', cakeRoutes);
-
-// Port setup
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Web Server is listening at port ${PORT}`);
+// Start server
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log('Server running on port ' + port);
 });

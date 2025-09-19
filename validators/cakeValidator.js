@@ -1,6 +1,5 @@
 const { body, validationResult } = require('express-validator');
 
-// Rules for creating/updating cakes
 const cakeValidationRules = () => {
   return [
     body('name').notEmpty().withMessage('Name is required'),
@@ -10,7 +9,6 @@ const cakeValidationRules = () => {
   ];
 };
 
-// Middleware to check results
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) return next();

@@ -1,31 +1,29 @@
-const { body, validationResult } = require('express-validator');
+const express = require('express');
+const {
+  getConsumers,
+  getConsumerById,
+  createConsumer,
+  updateConsumer,
+  deleteConsumer
+} = require('../controllers/consumerController');
 
-// Rules for creating/updating consumers
-const consumerValidationRules = () => {
-  return [
-    body('firstName').notEmpty().withMessage('First name is required'),
-    body('lastName').notEmpty().withMessage('Last name is required'),
-    body('email').isEmail().withMessage('Valid email is required'),
-    body('phone').optional().isMobilePhone().withMessage('Phone must be valid'),
-    body('address').optional().isString().withMessage('Address must be a string'),
-    body('preferredFlavor').optional().isString().withMessage('Preferred flavor must be a string'),
-    body('allergies').optional().isString().withMessage('Allergies must be a string'),
-    body('orderHistory').optional().isArray().withMessage('Order history must be an array')
-  ];
-};
+const { consumerValidationRules, validate } = require('../validators/consumerValidator');
 
-// Middleware to check validation results
-const validate = (req, res, next) => {
-  const errors = validationResult(req);
-  if (errors.isEmpty()) return next();
+const router = express.Router();
 
-  const extractedErrors = [];
-  errors.array().map(err => extractedErrors.push({ [err.param]: err.msg }));
+// GET all consumers
+router.get('/', getConsumers);
 
-  return res.status(422).json({ errors: extractedErrors });
-};
+// GET consumer by ID
+router.get('/:id', getConsumerById);
 
-module.exports = {
-  consumerValidationRules,
-  validate
-};
+// POST new consumer
+router.post('/', consumerValidationRules(), validate, createConsumer);
+
+// PUT update consumer
+router.put('/:id', consumerValidationRules(), validate, updateConsumer);
+
+// DELETE consumer
+router.delete('/:id', deleteConsumer);
+
+module.exports = router;

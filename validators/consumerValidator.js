@@ -1,6 +1,5 @@
 const { body, validationResult } = require('express-validator');
 
-// Rules for creating/updating consumers
 const consumerValidationRules = () => {
   return [
     body('firstName').notEmpty().withMessage('First name is required'),
@@ -14,7 +13,6 @@ const consumerValidationRules = () => {
   ];
 };
 
-// Middleware to check validation results
 const validate = (req, res, next) => {
   const errors = validationResult(req);
   if (errors.isEmpty()) return next();

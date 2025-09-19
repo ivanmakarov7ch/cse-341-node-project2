@@ -1,6 +1,6 @@
 const Cake = require('../models/cake');
 
-// GET all cakes
+// GET all
 exports.getCakes = async (req, res) => {
   try {
     const cakes = await Cake.find();
@@ -10,7 +10,7 @@ exports.getCakes = async (req, res) => {
   }
 };
 
-// GET cake by ID
+// GET by ID
 exports.getCakeById = async (req, res) => {
   try {
     const cake = await Cake.findById(req.params.id);
@@ -21,18 +21,18 @@ exports.getCakeById = async (req, res) => {
   }
 };
 
-// POST new cake
+// POST
 exports.createCake = async (req, res) => {
   try {
-    const cake = new Cake(req.body);
-    const savedCake = await cake.save();
+    const newCake = new Cake(req.body);
+    const savedCake = await newCake.save();
     res.status(201).json(savedCake);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// PUT update cake
+// PUT
 exports.updateCake = async (req, res) => {
   try {
     const updatedCake = await Cake.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -43,7 +43,7 @@ exports.updateCake = async (req, res) => {
   }
 };
 
-// DELETE cake
+// DELETE
 exports.deleteCake = async (req, res) => {
   try {
     const deletedCake = await Cake.findByIdAndDelete(req.params.id);
