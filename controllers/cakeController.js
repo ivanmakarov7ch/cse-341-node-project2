@@ -1,15 +1,6 @@
 const Cake = require('../models/cake');
-const Joi = require('joi');
 
-// Validation schema
-const cakeSchema = Joi.object({
-  name: Joi.string().required(),
-  size: Joi.string().valid('small', 'medium', 'large').required(),
-  price: Joi.number().positive().required(),
-  ingredients: Joi.array().items(Joi.string())
-});
-
-// GET all
+// GET all cakes
 exports.getCakes = async (req, res) => {
   try {
     const cakes = await Cake.find();
@@ -19,7 +10,7 @@ exports.getCakes = async (req, res) => {
   }
 };
 
-// GET by id
+// GET cake by ID
 exports.getCakeById = async (req, res) => {
   try {
     const cake = await Cake.findById(req.params.id);
@@ -30,31 +21,21 @@ exports.getCakeById = async (req, res) => {
   }
 };
 
-// POST
+// POST new cake
 exports.createCake = async (req, res) => {
-  const { error } = cakeSchema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-
   try {
-    const newCake = new Cake(req.body);
-    const savedCake = await newCake.save();
+    const cake = new Cake(req.body);
+    const savedCake = await cake.save();
     res.status(201).json(savedCake);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// PUT
+// PUT update cake
 exports.updateCake = async (req, res) => {
-  const { error } = cakeSchema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-
   try {
-    const updatedCake = await Cake.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    const updatedCake = await Cake.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updatedCake) return res.status(404).json({ message: 'Cake not found' });
     res.json(updatedCake);
   } catch (err) {
@@ -62,7 +43,7 @@ exports.updateCake = async (req, res) => {
   }
 };
 
-// DELETE
+// DELETE cake
 exports.deleteCake = async (req, res) => {
   try {
     const deletedCake = await Cake.findByIdAndDelete(req.params.id);

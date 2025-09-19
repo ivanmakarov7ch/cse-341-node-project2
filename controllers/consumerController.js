@@ -1,31 +1,19 @@
 const Consumer = require('../models/consumer');
-const Joi = require('joi');
 
-// Validation schema
-const consumerSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string(),
-  address: Joi.string(),
-  preferredFlavor: Joi.string(),
-  allergies: Joi.string(),
-  orderHistory: Joi.array().items(Joi.string())
-});
-
-// GET all
+// GET all consumers
 exports.getConsumers = async (req, res) => {
   try {
-    const consumers = await Consumer.find();
+    const consumers = await Consumer.find().populate('favoriteCake');
     res.json(consumers);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// GET by id
+// GET consumer by ID
 exports.getConsumerById = async (req, res) => {
   try {
-    const consumer = await Consumer.findById(req.params.id);
+    const consumer = await Consumer.findById(req.params.id).populate('favoriteCake');
     if (!consumer) return res.status(404).json({ message: 'Consumer not found' });
     res.json(consumer);
   } catch (err) {
@@ -33,43 +21,33 @@ exports.getConsumerById = async (req, res) => {
   }
 };
 
-// POST
+// POST new consumer
 exports.createConsumer = async (req, res) => {
-  const { error } = consumerSchema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-
   try {
-    const newConsumer = new Consumer(req.body);
-    const savedConsumer = await newConsumer.save();
+    const consumer = new Consumer(req.body);
+    const savedConsumer = await consumer.save();
     res.status(201).json(savedConsumer);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// PUT
+// PUT update consumer
 exports.updateConsumer = async (req, res) => {
-  const { error } = consumerSchema.validate(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
-
   try {
-    const updatedConsumer = await Consumer.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!updatedConsumer) return res.status(404).json({ message: 'Consumer not found' });
-    res.json(updatedConsumer);
+    const updated = await Consumer.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updated) return res.status(404).json({ message: 'Consumer not found' });
+    res.json(updated);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
 
-// DELETE
+// DELETE consumer
 exports.deleteConsumer = async (req, res) => {
   try {
-    const deletedConsumer = await Consumer.findByIdAndDelete(req.params.id);
-    if (!deletedConsumer) return res.status(404).json({ message: 'Consumer not found' });
+    const deleted = await Consumer.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: 'Consumer not found' });
     res.json({ message: 'Consumer deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });
