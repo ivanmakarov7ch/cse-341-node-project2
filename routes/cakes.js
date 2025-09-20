@@ -13,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * api/cakes:
+ * /api/cakes:
  *   get:
  *     summary: Get all cakes
  *     responses:
