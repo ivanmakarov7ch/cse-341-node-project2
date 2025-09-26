@@ -6,6 +6,7 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const connectDB = require('./db/connection');
 const User = require('./models/user');
+const path = require('path');
 
 const consumersRouter = require('./routes/consumers');
 const cakesRouter = require('./routes/cakes');
@@ -16,6 +17,9 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files from public folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // =======================
 // Connect to MongoDB first
@@ -128,15 +132,7 @@ app.use(express.urlencoded({ extended: true }));
 
     // Home page
     app.get('/', (req, res) => {
-      if (req.isAuthenticated()) {
-        res.send(
-          `<h1>Hello ${req.user.username}!</h1><a href="/logout">Logout</a>`
-        );
-      } else {
-        res.send(
-          '<h1>Hello World, This is Node Project2!</h1><a href="/auth/github">Login with GitHub</a>'
-        );
-      }
+      res.sendFile(path.join(__dirname, 'public', 'index.html'));
     });
 
     // Swagger
