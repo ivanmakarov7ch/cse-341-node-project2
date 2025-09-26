@@ -1,30 +1,40 @@
-const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 
 const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Cake & Consumer API',
-      version: '1.0.0',
-      description: 'API for managing cakes and consumers',
+      title: "Project2 API",
+      version: "1.0.0",
+      description: "Project2 API with OAuth authentication",
     },
     servers: [
-      {
-        url: 'http://localhost:3000', // for local
-      },
-      {
-        url: 'https://cse-341-node-project2.onrender.com', // for Render deployment
-      },
+      { url: "http://localhost:3000" },
+      { url: "https://cse-341-node-project2.onrender.com" },
     ],
+    components: {
+      securitySchemes: {
+        githubAuth: {
+          type: "oauth2",
+          flows: {
+            authorizationCode: {
+              authorizationUrl: "https://github.com/login/oauth/authorize",
+              tokenUrl: "https://github.com/login/oauth/access_token",
+              scopes: {
+                "user:email": "Read user email",
+              },
+            },
+          },
+        },
+      },
+    },
   },
-  apis: ['./routes/*.js'], // <-- path to your route files
+  apis: ["./routes/*.js"],
 };
 
-const swaggerSpec = swaggerJsdoc(options);
+const specs = swaggerJsdoc(options);
 
-function swaggerDocs(app) {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-}
-
-module.exports = swaggerDocs;
+module.exports = (app) => {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+};

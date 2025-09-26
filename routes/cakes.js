@@ -8,6 +8,7 @@ const {
 } = require('../controllers/cakeController');
 
 const { cakeValidationRules, validate } = require('../validators/cakeValidator');
+const ensureAuthenticated = require('../middleware/authMiddleware'); // ✅ new middleware
 
 const router = express.Router();
 
@@ -15,18 +16,22 @@ const router = express.Router();
  * @swagger
  * /api/cakes:
  *   get:
- *     summary: Get all cakes
+ *     summary: Get all cakes (Protected)
+ *     security:
+ *       - oauth: []
  *     responses:
  *       200:
  *         description: List of cakes
+ *       401:
+ *         description: Unauthorized
  */
-router.get('/', getCakes); // GET all cakes
+router.get('/', ensureAuthenticated, getCakes); // ✅ protected
 
 /**
  * @swagger
  * /api/cakes/{id}:
  *   get:
- *     summary: Get a cake by ID
+ *     summary: Get a cake by ID (Protected)
  *     parameters:
  *       - in: path
  *         name: id
@@ -34,20 +39,25 @@ router.get('/', getCakes); // GET all cakes
  *           type: string
  *         required: true
  *         description: Cake ID
+ *     security:
+ *       - oauth: []
  *     responses:
  *       200:
  *         description: A single cake
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Cake not found
  */
-router.get('/:id', getCakeById); // GET cake by ID
-
+router.get('/:id', ensureAuthenticated, getCakeById); // ✅ protected
 
 /**
  * @swagger
  * /api/cakes:
  *   post:
- *     summary: Create a new cake
+ *     summary: Create a new cake (Protected)
+ *     security:
+ *       - oauth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -71,14 +81,16 @@ router.get('/:id', getCakeById); // GET cake by ID
  *         description: Cake created
  *       400:
  *         description: Validation error
+ *       401:
+ *         description: Unauthorized
  */
-router.post('/', cakeValidationRules(), validate, createCake); // POST new cake
+router.post('/', ensureAuthenticated, cakeValidationRules(), validate, createCake); // ✅ protected
 
 /**
  * @swagger
  * /api/cakes/{id}:
  *   put:
- *     summary: Update an existing cake
+ *     summary: Update an existing cake (Protected)
  *     parameters:
  *       - in: path
  *         name: id
@@ -86,6 +98,8 @@ router.post('/', cakeValidationRules(), validate, createCake); // POST new cake
  *           type: string
  *         required: true
  *         description: Cake ID
+ *     security:
+ *       - oauth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -107,16 +121,18 @@ router.post('/', cakeValidationRules(), validate, createCake); // POST new cake
  *     responses:
  *       200:
  *         description: Cake updated
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Cake not found
  */
-router.put('/:id', cakeValidationRules(), validate, updateCake); // PUT update cake
+router.put('/:id', ensureAuthenticated, cakeValidationRules(), validate, updateCake); // ✅ protected
 
 /**
  * @swagger
  * /api/cakes/{id}:
  *   delete:
- *     summary: Delete a cake by ID
+ *     summary: Delete a cake by ID (Protected)
  *     parameters:
  *       - in: path
  *         name: id
@@ -124,12 +140,16 @@ router.put('/:id', cakeValidationRules(), validate, updateCake); // PUT update c
  *           type: string
  *         required: true
  *         description: Cake ID
+ *     security:
+ *       - oauth: []
  *     responses:
  *       200:
  *         description: Cake deleted
+ *       401:
+ *         description: Unauthorized
  *       404:
  *         description: Cake not found
  */
-router.delete('/:id', deleteCake); // DELETE cake
+router.delete('/:id', ensureAuthenticated, deleteCake); // ✅ protected
 
 module.exports = router;
