@@ -22,3 +22,17 @@ img {
   height: 80px;
   margin-top: 20px;
 }
+
+.swagger-btn {
+  text-decoration: none;
+  color: white;
+  background-color: #007acc;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+.swagger-btn:hover {
+  background-color: #005fa3;
+}
